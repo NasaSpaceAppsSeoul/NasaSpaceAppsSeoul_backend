@@ -1,0 +1,73 @@
+# 모든 서비스 공통 설정. 각 서비스 application.yml에서
+#   spring.config.import: classpath:burnline-common.yml
+# 로 가져온다. 주의: 가져온 파일이 가져오는 쪽보다 우선한다 → 서비스마다 다른 값(포트, 헬스 그룹)은 여기 두지 않는다.
+
+server:
+  shutdown: graceful
+
+spring:
+  threads:
+    virtual:
+      enabled: true
+  data:
+    redis:
+      url: ${CACHE_URL:redis://localhost:6379}
+      timeout: 500ms          # 캐시가 느리면 기다리지 않고 DB로
+      connect-timeout: 500ms
+  jackson:
+    default-property-inclusion: always   # 명세: 값이 없으면 null로 내려준다
+
+# 운영 공통 기능: /health/live, /health/ready, /metrics
+management:
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: health,prometheus,info
+      path-mapping:
+        prometheus: metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+      group:
+        live:
+          include: livenessState
+        # ready 그룹은 서비스 application.yml에서 정한다 (DB 쓰는 서비스: readinessState,db)
+  health:
+    redis:
+      enabled: false                    # 캐시 장애로 서비스를 내리지 않는다
+  metrics:
+    tags:
+      service: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+
+# 구조화 로그 (JSON 한 줄, requestId 포함) → promtail → Loki
+logging:
+  structured:
+    format:
+      console: ecs
+
+burnline:
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:*}
+  cache:
+    ttl-final: 24h      # 과거 달: data_version이 바뀔 때까지
+    ttl-recent: 5m      # 진행 중인 달(partial·nrt)
+  internal:
+    timeout: 10s
+    retries: 1
+    backoff: 200ms
+    failure-rate-percent: 50
+    open-duration: 30s
+  services:
+    catalog: ${CATALOG_URL:http://localhost:8081}
+    timeseries: ${TIMESERIES_URL:http://localhost:8082}
+    spatial: ${SPATIAL_URL:http://localhost:8083}
+  data:
+    # burnline_backend_data/burnline_backend_data (모듈 폴더에서 실행할 때 기준 상대 경로)
+    dir: ${DATA_DIR:../../burnline_backend_data/burnline_backend_data}
+    load: ${DATA_LOAD:if-empty}       # never | if-empty | always
