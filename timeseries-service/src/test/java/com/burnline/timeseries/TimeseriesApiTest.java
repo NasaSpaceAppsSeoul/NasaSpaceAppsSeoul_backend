@@ -108,7 +108,7 @@ class TimeseriesApiTest {
     @Test
     void judgement_butte_camp_fire_spec_7_13() throws Exception {
         mvc.perform(get("/api/v1/CAL/judgement/" + BUTTE + "?month=2018-11"))
-                .andExpect(jsonPath("$.label_ko").value("Butte"))
+                .andExpect(jsonPath("$.label_ko").value("뷰트"))   // 해외 구역 label_ko = 한국어 음역 (영어는 catalog name_en)
                 .andExpect(jsonPath("$.value").value(1162.0))
                 .andExpect(jsonPath("$.region_type").value("sufficient"))
                 .andExpect(jsonPath("$.chip").value("record"))
@@ -288,9 +288,10 @@ class TimeseriesApiTest {
                 .andExpect(jsonPath("$.months[0].raw_before").value(111.0));
         mvc.perform(get("/api/v1/KOR/series/KOR?from=2025-03&to=2025-03"))
                 .andExpect(jsonPath("$.months[0].raw_before").value(1093.0));
-        // 하위 구역: 2012-02 전은 없음
+        // 하위 구역: 보정 전 원값은 2012-02 전에도 있다(MODIS 원값). 보정값 value는 2012-02 전 null
         mvc.perform(get("/api/v1/KOR/series/" + UISEONG + "?from=2011-12&to=2025-03"))
-                .andExpect(jsonPath("$.months[0].raw_before").isEmpty())
+                .andExpect(jsonPath("$.months[0].value").isEmpty())
+                .andExpect(jsonPath("$.months[0].raw_before").isNumber())
                 .andExpect(jsonPath("$.months[-1].raw_before").isNumber());
         // 시·도: 소속 시·군·구 raw_before 합 (경북 22곳). 2012 전도 MODIS 원값 합으로 채워짐
         mvc.perform(get("/api/v1/KOR/series/경북?from=2025-03&to=2025-03"))

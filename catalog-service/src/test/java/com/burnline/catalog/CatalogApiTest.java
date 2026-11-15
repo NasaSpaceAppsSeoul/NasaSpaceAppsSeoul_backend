@@ -131,10 +131,10 @@ class CatalogApiTest {
                 .andExpect(jsonPath("$.items", hasSize(14)))
                 // 상위 단위 ID는 경계 파일 원래 이름 그대로, 화면 이름은 ADM1 파일의 name_en·name_ko
                 .andExpect(jsonPath("$.items[?(@.id == 'Attikis')].name_en").value(hasItem("Attica")))
-                .andExpect(jsonPath("$.items[?(@.id == 'Attikis')].label_ko").value(hasItem("아티키")));
+                .andExpect(jsonPath("$.items[?(@.id == 'Attikis')].label_ko").value(hasItem("아티카 주")));
         mvc.perform(get("/api/v1/CHL/regions").param("level", "prov"))
                 .andExpect(jsonPath("$.items[?(@.id == 'Región del Bío-Bío')].name_en").value(hasItem("Biobío")))
-                .andExpect(jsonPath("$.items[?(@.id == 'Región del Bío-Bío')].label_ko").value(hasItem("비오비오")));
+                .andExpect(jsonPath("$.items[?(@.id == 'Región del Bío-Bío')].label_ko").value(hasItem("비오비오 주")));
         mvc.perform(get("/api/v1/KOR/regions").param("level", "prov"))   // 한국은 그대로: ID·label_ko 경북, name_en North Gyeongsang
                 .andExpect(jsonPath("$.items[?(@.id == '경북')].name_en").value(hasItem("North Gyeongsang")));
     }
@@ -171,11 +171,14 @@ class CatalogApiTest {
 
     @Test
     void bc_and_cal_districts() throws Exception {
+        // 해외 구역: label_ko는 한국어 음역(파이프라인 name_ko), 영어 화면은 name_en (원래 이름)
         mvc.perform(get("/api/v1/BC/regions/BC-RD-60"))
-                .andExpect(jsonPath("$.label_ko").value("Peace River"))
+                .andExpect(jsonPath("$.label_ko").value("피스 리버"))
+                .andExpect(jsonPath("$.name_en").value("Peace River"))
                 .andExpect(jsonPath("$.province").doesNotExist());
         mvc.perform(get("/api/v1/CAL/regions/52423323B88547646561946"))
-                .andExpect(jsonPath("$.label_ko").value("Butte"))
+                .andExpect(jsonPath("$.label_ko").value("뷰트"))
+                .andExpect(jsonPath("$.name_en").value("Butte"))
                 .andExpect(jsonPath("$.region_type").value("sufficient"))
                 .andExpect(jsonPath("$.judge_unit").value("self"));
     }

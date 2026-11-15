@@ -83,7 +83,9 @@ public final class OfficialFireReader {
     static List<Fire> standard(Path csv, RegionIndex index, String source,
                                Predicate<CSVRecord> locatable, Function<CSVRecord, Integer> agencyYear) {
         if (!java.nio.file.Files.exists(csv)) {
-            return List.of();   // 외부 파일 없으면 공식 기록 없음으로 처리
+            // 데이터 패키지에 파일이 빠지면 조용히 넘어가지 않게 로그를 남긴다 (공식 기록 표·감지율이 비게 됨)
+            org.slf4j.LoggerFactory.getLogger(OfficialFireReader.class).warn("official fire file missing, skipping: {}", csv);
+            return List.of();
         }
         List<Fire> out = new ArrayList<>();
         for (CSVRecord r : records(csv)) {

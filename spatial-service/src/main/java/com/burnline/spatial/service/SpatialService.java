@@ -424,7 +424,7 @@ public class SpatialService {
             Map<String, Object> x = new LinkedHashMap<>();
             Map<String, Object> r = regs.get(id);
             x.put("id", id);
-            x.put("label_ko", c.single() || distView ? r.get("label_ko") : r.get("province") + " " + r.get("label_ko"));
+            x.put("label_ko", c.single() || distView ? r.get("label_ko") : provinceLabel(r) + " " + r.get("label_ko"));
             x.put("value", v);
             x.put("rank", v > 0 ? (Integer) rs.getObject(3) : null);
             x.put("n", rs.getObject(4));
@@ -512,6 +512,13 @@ public class SpatialService {
             throw ApiException.regionNotFound(c.name(), parent);
         }
         return ids;
+    }
+
+    /** 상위 단위 한국어 이름 (그리스 "Attikis" → "아티카 주"). 파이프라인 province_ko가 없으면 ID(한국은 ID가 곧 "경북") */
+    private static Object provinceLabel(Map<String, Object> r) {
+        Object facts = r.get("facts");
+        String ko = facts instanceof JsonNode f ? f.path("province_ko").asText(null) : null;
+        return ko == null || ko.isEmpty() ? r.get("province") : ko;
     }
 
     private Map<String, Object> requireRegion(Country c, String id) {

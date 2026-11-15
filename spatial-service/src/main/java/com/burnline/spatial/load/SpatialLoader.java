@@ -84,9 +84,13 @@ public class SpatialLoader implements Loader {
             facts.set("annual_all", p.get("viirs_annual_all_years"));
             facts.set("longterm", p.get("longterm"));
             facts.set("neighbors", p.get("neighbors"));
+            facts.put("province_ko", p.path("province_ko").asText(null));   // 상위 단위 한국어 이름 (/top 앞머리용, 없으면 ID)
             facts.set("yrs_fire_by_month", calRegions.path(id).path("viirs").path("years_with_fire_by_month"));
             double[] ctr = centers.getOrDefault(id, new double[]{0, 0});
-            regionRows.add(new Object[]{c.name(), id, p.path("name").asText(), ko.getOrDefault(id, p.path("name").asText()),
+            // label_ko: KOR은 공식 이름표, 그 밖은 파이프라인 name_ko (catalog·timeseries와 같은 규칙, 없으면 원래 이름)
+            String labelKo = c == Country.KOR ? ko.getOrDefault(id, p.path("name").asText())
+                    : p.path("name_ko").asText(p.path("name").asText());
+            regionRows.add(new Object[]{c.name(), id, p.path("name").asText(), labelKo,
                     c.single() ? null : p.path("province").asText(null), json(new double[]{round4(ctr[0]), round4(ctr[1])}),
                     facts.toString()});
         });
