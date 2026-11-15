@@ -1,0 +1,27 @@
+server:
+  port: ${SERVER_PORT:8083}
+
+spring:
+  application:
+    name: spatial
+  config:
+    import: classpath:burnline-common.yml
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/burnline}
+    username: ${DATABASE_USER:burnline}
+    password: ${DATABASE_PASSWORD:burnline}
+  flyway:
+    schemas: spatial
+    default-schema: spatial
+    create-schemas: true
+
+burnline:
+  data:
+    version-table: spatial.data_version
+
+management:
+  endpoint:
+    health:
+      group:
+        ready:
+          include: readinessState,db
