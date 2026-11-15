@@ -1,0 +1,27 @@
+server:
+  port: ${SERVER_PORT:8082}
+
+spring:
+  application:
+    name: timeseries
+  config:
+    import: classpath:burnline-common.yml
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/burnline}
+    username: ${DATABASE_USER:burnline}
+    password: ${DATABASE_PASSWORD:burnline}
+  flyway:
+    schemas: timeseries
+    default-schema: timeseries
+    create-schemas: true
+
+burnline:
+  data:
+    version-table: timeseries.data_version
+
+management:
+  endpoint:
+    health:
+      group:
+        ready:
+          include: readinessState,db
