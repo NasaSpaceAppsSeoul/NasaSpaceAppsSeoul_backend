@@ -1,0 +1,9 @@
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.flywaydb:flyway-core'                 // 표 정의 (src/main/resources/db/migration)
+    implementation 'org.flywaydb:flyway-database-postgresql'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // 테스트: Docker 없이 실제 PostgreSQL을 띄운다
+    testImplementation 'io.zonky.test:embedded-postgres:2.1.0'
+}
