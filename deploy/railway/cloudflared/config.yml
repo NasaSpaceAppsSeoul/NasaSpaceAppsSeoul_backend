@@ -1,0 +1,25 @@
+tunnel: e99efe66-e791-44d4-9e82-a2a94aa1ba34
+credentials-file: /etc/cloudflared/creds.json
+
+ingress:
+  # catalog (Railway internal)
+  - hostname: burnline-api.unzipp.cloud
+    path: ^/api/v1/[^/]+/(meta|regions|geo)(/.*)?$
+    service: http://burnline-catalog.railway.internal:8080
+
+  # insight (Railway internal)
+  - hostname: burnline-api.unzipp.cloud
+    path: ^/api/v1/[^/]+/(insight|top|landing)(/.*)?$
+    service: http://burnline-insight.railway.internal:8080
+
+  # timeseries (Railway internal)
+  - hostname: burnline-api.unzipp.cloud
+    path: ^/api/v1/[^/]+/(series|baseline|judgement|export\.csv)(/.*)?$
+    service: http://burnline-timeseries.railway.internal:8080
+
+  # spatial (Railway internal)
+  - hostname: burnline-api.unzipp.cloud
+    path: ^/api/v1/[^/]+/(map|events|official-fires)(/.*)?$
+    service: http://burnline-spatial.railway.internal:8080
+
+  - service: http_status:404

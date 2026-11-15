@@ -1,0 +1,22 @@
+app = 'burnline-spatial'
+primary_region = 'sin'
+
+[build]
+  dockerfile = 'deploy/fly/spatial/Dockerfile'
+
+[env]
+  DATA_LOAD      = "never"
+  CORS_ORIGINS   = "https://burnline.vercel.app"
+  TIMESERIES_URL = "https://burnline-timeseries.fly.dev"
+
+[http_service]
+  internal_port     = 8083
+  force_https       = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  memory   = "256mb"
+  cpu_kind = "shared"
+  cpus     = 1

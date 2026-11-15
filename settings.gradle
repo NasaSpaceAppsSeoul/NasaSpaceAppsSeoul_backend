@@ -1,0 +1,7 @@
+rootProject.name = 'burnline-backend'
+
+include 'common'             // 공통: 에러, enum, 캐시, 내부 호출(재시도·서킷), 요청 ID
+include 'catalog-service'    // A: /meta /regions /regions/{id} /geo
+include 'timeseries-service' // A: /series /baseline /judgement /export.csv + 판정
+include 'spatial-service'    // B: /map /events /official-fires + 내부(달 상세, 순위, 랜딩 원자료)
+include 'insight-service'    // B: /insight /top /landing (DB 없음, 다른 서비스 조합)
