@@ -1,0 +1,27 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  application:
+    name: catalog
+  config:
+    import: classpath:burnline-common.yml
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/burnline}
+    username: ${DATABASE_USER:burnline}
+    password: ${DATABASE_PASSWORD:burnline}
+  flyway:
+    schemas: catalog
+    default-schema: catalog
+    create-schemas: true
+
+burnline:
+  data:
+    version-table: catalog.data_version
+
+management:
+  endpoint:
+    health:
+      group:
+        ready:
+          include: readinessState,db
