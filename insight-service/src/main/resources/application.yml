@@ -1,0 +1,18 @@
+server:
+  port: ${SERVER_PORT:8084}
+
+spring:
+  application:
+    name: insight
+  config:
+    import: classpath:burnline-common.yml
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+management:
+  endpoint:
+    health:
+      group:
+        ready:
+          include: readinessState

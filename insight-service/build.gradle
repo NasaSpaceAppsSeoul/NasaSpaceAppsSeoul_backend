@@ -1,0 +1,3 @@
+// insight는 DB가 없다. 다른 서비스(catalog·timeseries·spatial)를 내부 API로 불러 화면을 조합한다.
+dependencies {
+}
