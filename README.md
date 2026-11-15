@@ -162,7 +162,7 @@ The `load` profile reloads all six regions and exits. Check the log for one `loa
 | Source | Used for | Link |
 |---|---|---|
 | NASA FIRMS active fire (MODIS C6.1; VIIRS C2: S-NPP, NOAA-20, NOAA-21) | All fire values | [FIRMS download](https://firms.modaps.eosdis.nasa.gov/download/) |
-| Korea Forest Service · KOSIS | Korea validation | [Korea links] |
+| Korea Forest Service: per-fire records and yearly counts by province (2001–2025) | Korea validation | [National Wildfire Information System](https://fd.forest.go.kr/ffas/pubConn/movePage/sub3.do) · [Forestry Statistics Platform](https://kfss.forest.go.kr/stat/ptl/newStat/newStatDtl.do?evntUpperSeq=8&evntSeq=46) |
 | CAL FIRE FRAP California Fire Perimeters | California validation | [data.gov](https://catalog.data.gov/dataset/california-fire-perimeters-all) |
 | BC Wildfire Service historical incidents | BC validation | [BC Data Catalogue](https://catalogue.data.gov.bc.ca/dataset/fire-incident-locations-historical) |
 | Hellenic Fire Service forest fire records | Greece validation | [Internet Archive copy](https://web.archive.org/web/20260123051753/https://www.fireservice.gr/el/synola-dedomenon) |
